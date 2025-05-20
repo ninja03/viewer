@@ -43,10 +43,10 @@ const GameId = styled("div")({ fontSize: "0.8em" });
 
 const GameList = (props: {
   games: Game[];
-  pagenation?: boolean;
+  pagination?: boolean;
   hover?: boolean;
 }) => {
-  const pagenation = props.pagenation ?? true;
+  const pagination = props.pagination ?? true;
   const hover = props.hover ?? true;
   const games = props.games;
 
@@ -199,7 +199,7 @@ const GameList = (props: {
                       color: game.name ? "black" : "gray",
                     }}
                   >
-                    {game.name || "Untitle"}
+                    {game.name || "Untitled"}
                   </Link>
                   <GameId>{game.id}</GameId>
                 </TableCell>
@@ -207,7 +207,7 @@ const GameList = (props: {
               </TableRow>
             ))}
           </TableBody>
-          {pagenation && (
+          {pagination && (
             <TableFooter>
               <TableRow>
                 <TablePagination
