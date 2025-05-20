@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import Image from "next/image";
 import { keyframes, styled } from "@mui/material/styles";
 import { useResizeDetector } from "react-resize-detector";
@@ -152,7 +152,7 @@ const StyledNextTile = styled("div")({
   justifyContent: "center",
 });
 
-function Cell({
+const Cell = React.memo(function Cell({
   point,
   i,
   nAgent,
@@ -170,7 +170,7 @@ function Cell({
   bgColor: string;
   nConflict: number;
   isAbs: boolean;
-}) {
+  }) {
   const animation = useMemo(() => {
     return nConflict > 0
       ? `${flash} ${1 - (0.6 / nAgent) * nConflict}s linear infinite`
@@ -194,7 +194,7 @@ function Cell({
       {isAbs && <span>{Math.abs(point)}</span>}
     </StyledCell>
   );
-}
+});
 
 export default function Gamefield({
   game: { field, players, log, nAgent },
