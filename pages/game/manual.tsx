@@ -403,13 +403,43 @@ const Page: NextPage = () => {
       const agent = agents[agentId];
       if (agent.x < 0) {
         // エージェントが配置されていない場合は既定の場所に配置
-        // TODO: 既定の場所が配置できない場合はどうする？
         const playerIndex = matchRes.index;
         let x = playerIndex === 0 ? 1 : field.width - 2;
-
-        const y = Math.floor(
+        let y = Math.floor(
           ((field.height - 1) / (enableAgents.length - 1)) * i
         );
+
+        const hasAgent = (xx: number, yy: number) =>
+          game.players.some((p) =>
+            p.agents.some((a) => a.x === xx && a.y === yy)
+          );
+
+        const canPut = (xx: number, yy: number) => {
+          if (xx < 0 || yy < 0 || xx >= field.width || yy >= field.height)
+            return false;
+          const tile = field.tiles[yy * field.width + xx];
+          if (!tile) return false;
+          if (tile.type === 1 && tile.player !== null && tile.player !== playerIndex)
+            return false;
+          if (hasAgent(xx, yy)) return false;
+          return true;
+        };
+
+        if (!canPut(x, y)) {
+          let found = false;
+          outer: for (let yy = 0; yy < field.height; yy++) {
+            for (let xx = 0; xx < field.width; xx++) {
+              if (canPut(xx, yy)) {
+                x = xx;
+                y = yy;
+                found = true;
+                break outer;
+              }
+            }
+          }
+          if (!found) return { agentId, type: "NONE" } as const;
+        }
+
         const action = { agentId, x, y, type: "PUT" } as const;
         return action;
       } else {
