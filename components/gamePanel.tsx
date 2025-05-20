@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { Box, Skeleton, Button, Paper } from "@mui/material";
 
-import GameBoard from "./gameBoard";
-import PointsGraph from "./pointsGraph";
+import dynamic from "next/dynamic";
+
+const GameBoard = dynamic(() => import("./gameBoard"));
+const PointsGraph = dynamic(() => import("./pointsGraph"), { ssr: false });
 import datas from "./player_datas";
 
 import { Game } from "../src/apiClient";
