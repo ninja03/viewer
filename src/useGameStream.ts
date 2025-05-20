@@ -23,10 +23,8 @@ export const useGameStream = (req?: StreamMatchesReq, bearerToken?: string) => {
     }
 
     const res = new EventSourcePolyfill(url.href, { headers });
-    console.log(res);
     res.addEventListener("message", (e) => {
       const data = JSON.parse(e.data) as StreamMatchesRes;
-      console.log(data);
 
       if (data.type === "initial") {
         setGames(data.games);
@@ -60,7 +58,9 @@ export const useGameStream = (req?: StreamMatchesReq, bearerToken?: string) => {
       }
     });
     res.onerror = (e) => {
-      console.log("error", e);
+      if (process.env.NODE_ENV !== "production") {
+        console.error("error", e);
+      }
     };
     return () => {
       res.close();
